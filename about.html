@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Об авторе</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+  .section {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+
+  .authors-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .author-card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .author-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 0 20px cyan;
+  }
+
+  .author-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid cyan;
+  }
+
+  .author-name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .author-bio {
+    font-size: 14px;
+    color: #cbd5e1;
+  }
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🎬</div>
+    Физика в кадре
+  </a>
+  <nav>
+    <a href="index.html">Главная</a>
+    <a href="about.html">Об авторе</a>
+    <a href="movies.html">Фильмы</a>
+    <a href="tests.html">Тесты</a>
+    <a href="scientists.html">Учёные</a>
+  </nav>
+</header>
+
+<section class="section">
+  <h2>Авторы проекта</h2>
+  <div class="authors-container">
+    
+    <!-- Автор 1 -->
+    <div class="author-card">
+      <img src="Ignat.jpg" alt="Автор 1" class="author-photo">
+      <div class="author-name">Игнат Кругленя</div>
+      <div class="author-bio">
+        Студент Белорусского государственного педагогического университета Им. Максима Танка, физико-математического факультета, специальность физика-информатика, группа 240422
+      </div>
+    </div>
+
+    <!-- Автор 2 -->
+    <div class="author-card">
+      <img src="nikita.jpg" alt="Автор 2" class="author-photo">
+      <div class="author-name">Никита Росийский</div>
+      <div class="author-bio">
+        Студент Белорусского государственного педагогического университета Им. Максима Танка, физико-математического факультета, специальность физика-информатика, группа 240422
+      </div>
+    </div>
+
+  </div>
+</section>
+<footer>
+  <div class="footer-container">
+
+    <div class="footer-nav">
+      <a href="index.html">Главная</a>
+      <a href="about.html">Об авторе</a>
+      <a href="movies.html">Фильмы</a>
+      <a href="tests.html">Тесты</a>
+      <a href="scientists.html">Учёные</a>
+    </div>
+
+    <div class="footer-social">
+
+      <a href="https://www.instagram.com/mp13q/" target="_blank">
+        📷 Instagram
+      </a>
+
+      <a href="https://t.me" target="_blank">
+        ✈ Telegram
+      </a>
+
+      <a href="mailto:physicsproject@email.com">
+        ✉ physicsproject@email.com
+      </a>
+
+    </div>
+
+    <p>© 2026 Физика в кадре</p>
+
+  </div>
+</footer>
+</body>
+</html>

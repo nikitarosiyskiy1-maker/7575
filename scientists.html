@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Учёные — Физика в кадре</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* Шапка - единый стиль */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      border-bottom: none;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 22px;
+      font-weight: 800;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 15px;
+      background: linear-gradient(45deg, cyan, deepskyblue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #0f172a;
+      box-shadow: 0 0 15px cyan;
+      animation: pulse 2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { box-shadow: 0 0 10px cyan; }
+      to { box-shadow: 0 0 25px deepskyblue; }
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #fff;
+      transition: 0.3s;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: cyan;
+    }
+
+    /* Основная секция */
+    .section {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 40px 40px 60px;
+    }
+
+    .section h2 {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, cyan, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section > p {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 50px auto;
+      color: #cbd5e1;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    /* Сетка ученых */
+    .scientists-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 35px;
+    }
+
+    /* Карточка ученого - стеклянный стиль как на других страницах */
+    .scientist-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      overflow: hidden;
+      transition: all 0.4s ease;
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    .scientist-card:nth-child(1) { animation-delay: 0.1s; }
+    .scientist-card:nth-child(2) { animation-delay: 0.2s; }
+    .scientist-card:nth-child(3) { animation-delay: 0.3s; }
+    .scientist-card:nth-child(4) { animation-delay: 0.4s; }
+    .scientist-card:nth-child(5) { animation-delay: 0.5s; }
+    .scientist-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .scientist-card:hover {
+      transform: translateY(-8px);
+      border-color: cyan;
+      box-shadow: 0 0 28px rgba(0, 255, 255, 0.25);
+    }
+
+    /* Контейнер для изображения */
+    .scientist-image {
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    }
+
+    .scientist-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .scientist-card:hover .scientist-image img {
+      transform: scale(1.05);
+    }
+
+    /* Заглушка для отсутствующего изображения */
+    .image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1e2a3a, #0f172a);
+      font-size: 72px;
+    }
+
+    /* Информация об ученом */
+    .scientist-info {
+      padding: 22px 24px 24px;
+    }
+
+    .scientist-info h3 {
+      font-size: 26px;
+      color: cyan;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .scientist-years {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 15px;
+      display: inline-block;
+      background: rgba(0, 255, 255, 0.15);
+      padding: 4px 12px;
+      border-radius: 30px;
+    }
+
+    .scientist-description {
+      color: #e2e8f0;
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .scientist-achievement {
+      background: rgba(0, 255, 255, 0.1);
+      padding: 12px 16px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+      border-left: 3px solid cyan;
+      font-size: 13px;
+      color: #cbd5e6;
+    }
+
+    .scientist-achievement strong {
+      color: cyan;
+    }
+
+    /* Связь с фильмами */
+    .movie-tags {
+      margin-bottom: 20px;
+    }
+
+    .movie-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      margin-right: 8px;
+      margin-bottom: 6px;
+      color: #aaf0ff;
+    }
+
+    /* Кнопка ссылки на Википедию */
+    .wiki-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 255, 255, 0.15);
+      padding: 10px 20px;
+      border-radius: 40px;
+      text-decoration: none;
+      color: cyan;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.3s;
+      border: 1px solid rgba(0, 255, 255, 0.3);
+    }
+
+    .wiki-link:hover {
+      background: rgba(0, 255, 255, 0.3);
+      transform: translateX(5px);
+      box-shadow: 0 0 12px cyan;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Футер - единый стиль */
+    footer {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px 30px 30px;
+      text-align: center;
+      color: #94a3b8;
+      margin-top: 20px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      gap: 35px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .footer-nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .footer-nav a:hover {
+      color: cyan;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .footer-social a {
+      text-decoration: none;
+      color: #cbd5e1;
+      transition: 0.3s;
+    }
+
+    .footer-social a:hover {
+      color: cyan;
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 25px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      nav a {
+        margin: 0 12px;
+      }
+      .section {
+        padding: 30px 20px;
+      }
+      .section h2 {
+        font-size: 36px;
+      }
+      .scientists-grid {
+        grid-template-columns: 1fr;
+      }
+      .scientist-info h3 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🎬</div>
+    Физика в кадре
+  </a>
+  <nav>
+    <a href="index.html">Главная</a>
+    <a href="about.html">Об авторе</a>
+    <a href="movies.html">Фильмы</a>
+    <a href="tests.html">Тесты</a>
+    <a href="scientists.html">Учёные</a>
+  </nav>
+</header>
+
+<section class="section">
+  <h2>Учёные, оживившие науку в кино</h2>
+  <p>
+    Эти великие физики своими открытиями вдохновили создателей фильмов и помогли нам
+    лучше понять законы Вселенной. Их теории и работы легли в основу научных разборов
+    на нашем сайте.
+  </p>
+
+  <div class="scientists-grid">
+    
+    <!-- 1. Альберт Эйнштейн (Интерстеллар, Оппенгеймер) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg" 
+             alt="Альберт Эйнштейн"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>🧠</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Альберт Эйнштейн</h3>
+        <span class="scientist-years">1879–1955</span>
+        <p class="scientist-description">
+          Великий физик-теоретик, создатель общей теории относительности. Его работы о гравитации, искривлении пространства-времени и формуле E=mc² стали основой для фильмов «Интерстеллар» и «Оппенгеймер».
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главное открытие:</strong> Общая теория относительности, гравитационное замедление времени, E=mc²
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">🌌 Интерстеллар</span>
+          <span class="movie-tag">☢️ Оппенгеймер</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Эйнштейн,_Альберт" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 2. Кип Торн (Интерстеллар) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="kip.jpg" 
+             alt="Кип Торн"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>🌌</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Кип Торн</h3>
+        <span class="scientist-years">1940–н.в.</span>
+        <p class="scientist-description">
+          Американский физик-теоретик, лауреат Нобелевской премии за открытие гравитационных волн. Был научным консультантом фильма «Интерстеллар» и помог создать максимально реалистичную модель чёрной дыры.
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Вклад в науку:</strong> Гравитационные волны, чёрные дыры, червоточины
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">🌌 Интерстеллар</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Торн,_Кип" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 3. Исаак Ньютон (Особо опасен) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/GodfreyKneller-IsaacNewton-1689.jpg" 
+             alt="Исаак Ньютон"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>🍎</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Исаак Ньютон</h3>
+        <span class="scientist-years">1643–1727</span>
+        <p class="scientist-description">
+          Основоположник классической механики. Его три закона движения объясняют, как движутся пули, снаряды и все тела во Вселенной. В фильме «Особо опасен» законы Ньютона показывают, почему изогнутая пуля — это миф.
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главные открытия:</strong> Три закона механики, закон всемирного тяготения
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">💥 Особо опасен</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Ньютон,_Исаак" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 4. Эрнест Резерфорд (Человек-муравей) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="ern.jpg" 
+             alt="Эрнест Резерфорд"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>⚛️</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Эрнест Резерфорд</h3>
+        <span class="scientist-years">1871–1937</span>
+        <p class="scientist-description">
+          Британский физик, открывший атомное ядро и предложивший планетарную модель атома. Его работы объясняют, почему уменьшение человека в фильме «Человек-муравей» невозможно — атомную структуру нельзя сжать без разрушения.
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главное открытие:</strong> Открытие атомного ядра, протона, планетарная модель атома
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">🐜 Человек-муравей</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Резерфорд,_Эрнест" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 5. Нильс Бор (Человек-муравей) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="nil.jpg" 
+             alt="Нильс Бор"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>🔬</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Нильс Бор</h3>
+        <span class="scientist-years">1885–1962</span>
+        <p class="scientist-description">
+          Датский физик, разработавший квантовую модель атома с электронными оболочками. Его работы легли в основу квантовой физики, которая объясняет, почему уменьшение человека до размеров муравья противоречит законам природы.
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главное открытие:</strong> Квантовая модель атома, принцип дополнительности
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">🐜 Человек-муравей</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Бор,_Нильс" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 6. Макс Планк (Человек-муравей) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="Max.jpg" 
+             alt="Макс Планк"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>⚡</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Макс Планк</h3>
+        <span class="scientist-years">1858–1947</span>
+        <p class="scientist-description">
+          Немецкий физик, основатель квантовой теории. Его открытие квантов энергии заложило основы квантовой механики. В фильме «Человек-муравей» законы квантовой физики показывают, почему уменьшение человека — научная фантастика.
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главное открытие:</strong> Квантовая теория, постоянная Планка
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">🐜 Человек-муравей</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Планк,_Макс" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 7. Вернер Гейзенберг (Человек-муравей) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="vern.jpg" 
+             alt="Вернер Гейзенберг"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>🔮</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Вернер Гейзенберг</h3>
+        <span class="scientist-years">1901–1976</span>
+        <p class="scientist-description">
+          Немецкий физик, один из создателей квантовой механики. Сформулировал принцип неопределённости. Его работы показывают, что на квантовом уровне невозможно точно определить одновременно положение и импульс частицы.
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главное открытие:</strong> Принцип неопределённости, матричная механика
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">🐜 Человек-муравей</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Гейзенберг,_Вернер" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 8. Роберт Оппенгеймер (Оппенгеймер) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="open.jpg" 
+             alt="Роберт Оппенгеймер"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>☢️</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Роберт Оппенгеймер</h3>
+        <span class="scientist-years">1904–1967</span>
+        <p class="scientist-description">
+          Американский физик, научный руководитель Манхэттенского проекта. Его работа над созданием атомной бомбы стала центральной темой фильма «Оппенгеймер». Он сыграл ключевую роль в развитии ядерной физики.
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главное достижение:</strong> Руководство Манхэттенским проектом, создание атомной бомбы
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">☢️ Оппенгеймер</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Оппенгеймер,_Роберт" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 9. Отто Ган (Оппенгеймер) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="Otto.jpg" 
+             alt="Отто Ган"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>⚛️</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Отто Ган</h3>
+        <span class="scientist-years">1879–1968</span>
+        <p class="scientist-description">
+          Немецкий химик, открывший ядерное деление урана вместе с Фрицем Штрассманом. Это открытие стало основой для создания атомной бомбы и подробно показано в фильме «Оппенгеймер».
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главное открытие:</strong> Ядерное деление урана (1938)
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">☢️ Оппенгеймер</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Ган,_Отто" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+    <!-- 10. Фриц Штрассман (Оппенгеймер) -->
+    <div class="scientist-card">
+      <div class="scientist-image">
+        <img src="Fritz_Strassmann.jpg" 
+             alt="Фриц Штрассман"
+             onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>🔬</div>'">
+      </div>
+      <div class="scientist-info">
+        <h3>Фриц Штрассман</h3>
+        <span class="scientist-years">1902–1980</span>
+        <p class="scientist-description">
+          Немецкий химик, который вместе с Отто Ганом открыл ядерное деление. Их совместная работа заложила основу для цепной ядерной реакции и создания атомного оружия.
+        </p>
+        <div class="scientist-achievement">
+          <strong>🔭 Главное открытие:</strong> Ядерное деление урана (совместно с Отто Ганом)
+        </div>
+        <div class="movie-tags">
+          <span class="movie-tag">☢️ Оппенгеймер</span>
+        </div>
+        <a href="https://ru.wikipedia.org/wiki/Штрассман,_Фриц" target="_blank" class="wiki-link">
+          📖 Читать на Википедии →
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-nav">
+      <a href="index.html">Главная</a>
+      <a href="about.html">Об авторе</a>
+      <a href="movies.html">Фильмы</a>
+      <a href="tests.html">Тесты</a>
+      <a href="scientists.html">Учёные</a>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/mp13q/" target="_blank">📷 Instagram</a>
+      <a href="https://t.me" target="_blank">✈ Telegram</a>
+      <a href="mailto:physicsproject@email.com">✉ physicsproject@email.com</a>
+    </div>
+    <p>© 2026 Физика в кадре</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Фильмы — Физика в кадре</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Дополнительные стили для страницы фильмов, сохраняющие общий стиль проекта */
+    .section {
+      padding: 40px 60px;
+      flex: 1;
+    }
+
+    .section h2 {
+      font-size: 42px;
+      text-align: center;
+      margin-bottom: 30px;
+      background: linear-gradient(90deg, cyan, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .movies{
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* строго 2 в ряд */
+  gap: 30px;
+  margin-top: 40px;
+}
+
+/* чтобы видео красиво растягивалось */
+.card video{
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 15px;
+}
+
+    /* Карточка фильма — стеклянный стиль как в фичах */
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+      transition: transform 0.4s, box-shadow 0.4s;
+      padding: 0 0 20px 0;
+    }
+
+    .card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+      border-color: rgba(0, 255, 255, 0.4);
+    }
+
+    .card h3 {
+      font-size: 28px;
+      margin: 20px 0 8px;
+      text-align: center;
+      color: cyan;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    /* Видео */
+    video {
+      display: block;
+      margin: 0 auto;
+      width: 92%;
+      max-width: 750px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Контейнер анализа */
+    .movie-analysis {
+      max-width: 880px;
+      margin: 16px auto 8px auto;
+      padding: 0 20px 8px;
+    }
+
+    /* Сворачиваемые блоки — стеклянные, но чуть плотнее */
+    .collapsible-section {
+      background: rgba(20, 30, 45, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 20px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 12px 18px;
+      background: rgba(0, 0, 0, 0.3);
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #ffffff;
+      user-select: none;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+      gap: 10px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Стильные бейджи */
+    .badge-truth {
+      background: linear-gradient(135deg, #1e7e34, #0f5a28);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 0 6px #00ffaa66;
+      border: 1px solid rgba(0,255,200,0.4);
+    }
+    .badge-myth {
+      background: linear-gradient(135deg, #b91c1c, #7f1a1a);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 0 6px #ff555566;
+    }
+    .badge-neutral {
+      background: linear-gradient(135deg, #2c5282, #1e3a5f);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 40px;
+      text-transform: uppercase;
+    }
+
+    .toggle-btn {
+      background: rgba(0, 255, 255, 0.15);
+      border: 1px solid rgba(0, 255, 255, 0.5);
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      color: cyan;
+    }
+    .toggle-btn:hover {
+      background: rgba(0, 255, 255, 0.4);
+      transform: scale(1.05);
+    }
+
+    /* Содержимое разделов */
+    .section-content {
+      overflow: hidden;
+      transition: max-height 0.35s ease-out, padding 0.2s ease;
+      max-height: 0;
+      padding: 0 20px;
+      background: rgba(10, 20, 30, 0.5);
+      color: #f0f3fa;
+    }
+
+    .section-content:not(.collapsed) {
+      max-height: 1000px;
+      padding: 16px 20px 20px 20px;
+    }
+
+    .section-content.collapsed {
+      max-height: 0;
+      padding: 0 20px;
+    }
+
+    /* Текст внутри блоков */
+    .movie-analysis p,
+    .movie-analysis li,
+    .movie-analysis ul,
+    .movie-analysis b {
+      color: #e2e8f0;
+      line-height: 1.55;
+    }
+
+    .movie-analysis p {
+      margin: 12px 0;
+      font-size: 0.95rem;
+      text-indent: 0;
+    }
+
+    .movie-analysis b {
+      color: #7fffd4;
+      font-weight: 700;
+    }
+
+    .movie-analysis ul {
+      margin: 8px 0 12px 24px;
+    }
+
+    .movie-analysis li {
+      margin: 6px 0;
+    }
+
+    /* Адаптив */
+    @media (max-width: 800px) {
+      .section {
+        padding: 30px 20px;
+      }
+      .section h2 {
+        font-size: 32px;
+      }
+      .card h3 {
+        font-size: 24px;
+      }
+      .section-header {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+      }
+      .badge-truth, .badge-myth, .badge-neutral {
+        font-size: 0.6rem;
+        padding: 3px 10px;
+      }
+    }
+    /* Футер уже определён в общем css, но сохраним идентичность */
+    footer {
+      background: rgba(0,0,0,0.6);
+      padding: 30px 20px;
+      text-align: center;
+      color: #94a3b8;
+      margin-top: 20px;
+    }
+    .footer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    .footer-nav {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+    .footer-nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .footer-nav a:hover {
+      color: cyan;
+    }
+    .footer-social {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .footer-social a {
+      text-decoration: none;
+      color: #cbd5e1;
+      transition: 0.3s;
+    }
+    .footer-social a:hover {
+      color: cyan;
+    }
+    .movie-analysis a {
+  color: #7fffd4; /* Цвет морской волны, сочетается с вашим дизайном */
+  text-decoration: none;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.movie-analysis a:hover {
+  color: cyan;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+}
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🎬</div>
+    Физика в кадре
+  </a>
+  <nav>
+    <a href="index.html">Главная</a>
+    <a href="about.html">Об авторе</a>
+    <a href="movies.html">Фильмы</a>
+    <a href="tests.html">Тесты</a>
+    <a href="scientists.html">Учёные</a>
+  </nav>
+</header>
+
+<section class="section">
+  <h2>Фильмы проекта</h2>
+  <div class="movies">
+    
+    <!-- 1. ИНТЕРСТЕЛЛАР -->
+    <div class="card">
+      <h3>Интерстеллар</h3>
+      <video controls width="100%">
+        <source src="Интерстеллар.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+      </video>
+      <div class="movie-analysis">
+        <!-- Блок 1: ПРАВДА -->
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-truth">✓ Правда</span>
+              <span>📡 Общая теория относительности & Кип Торн</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>«Интерстеллар» — один из самых научно точных фильмов о космосе. Явления гравитации, чёрных дыр и искривления времени показаны с опорой на <b>общую теорию относительности Эйнштейна</b>. Научный консультант — нобелевский лауреат <b><a href="scientists.html" style="color: inherit; text-decoration: underline;">Кип Торн</a></b>, благодаря чему визуализация чёрной дыры максимально реалистична.</p>
+          </div>
+        </div>
+        
+        <!-- Блок 2: ПРАВДА (чёрные дыры) -->
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-truth">✓ Правда</span>
+              <span>⚫ Чёрные дыры: горизонт событий, аккреционный диск</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>Чёрная дыра — область, где гравитация не отпускает даже свет. Ключевые элементы:</p>
+            <ul>
+              <li><b>Горизонт событий</b> — граница невозврата.</li>
+              <li><b>Аккреционный диск</b> — раскалённый газ, вращающийся на огромной скорости.</li>
+              <li><b>Гравитационное линзирование</b> — искривление света вокруг массивного объекта.</li>
+            </ul>
+            <p>Всё это показано с высокой достоверностью, подтверждённой физиками.</p>
+          </div>
+        </div>
+        <!-- Блок 3: правда + миф (замедление времени и вымысел) -->
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-truth">✓ Правда</span>
+              <span class="badge-myth">✗ Миф</span>
+              <span>⏳ Замедление времени / Путешествие внутрь чёрной дыры</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p><span class="badge-truth" style="display: inline-block; margin-right: 8px;">✓ Правда</span> <b>Гравитационное замедление времени</b> — реальный эффект: рядом с массивными объектами время течёт медленнее. Это подтверждено экспериментами.</p>
+            <p><span class="badge-myth" style="display: inline-block; margin-right: 8px;">✗ Миф</span> Путешествие внутрь чёрной дыры и пятимерное пространство — художественный вымысел, добавленный для драматургии фильма.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. ОСОБО ОПАСЕН -->
+    <div class="card">
+      <h3>Особо опасен</h3>
+      <video controls width="100%">
+        <source src="Особо опасен.mp4" type="video/mp4">
+      </video>
+      <div class="movie-analysis">
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-truth">✓ Правда</span>
+              <span>🎯 Законы Ньютона: физика пули</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>Движение пули подчиняется <b><a href="scientists.html" style="color: inherit; text-decoration: underline;">Законам Ньютона</a></b>. На неё действуют начальная скорость, сила тяжести и сопротивление воздуха — это достоверный научный факт.</p>
+          </div>
+        </div>
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-myth">✗ Миф</span>
+              <span>💥 Изменение траектории пули в полёте</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>Чтобы пуля резко изменила направление, необходима мощная боковая сила. В реальных условиях (после выстрела) такой силы нет. «Закручивание» пули — <b>чистый голливудский вымысел</b> для зрелищности.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. ЧЕЛОВЕК-МУРАВЕЙ -->
+    <div class="card">
+      <h3>Человек-муравей</h3>
+      <video controls width="100%">
+        <source src="Человек-муравей.mp4" type="video/mp4">
+      </video>
+      <div class="movie-analysis">
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-truth">✓ Правда</span>
+              <span>⚛️ Атомная структура вещества (Резерфорд, Бор)</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>Все тела состоят из атомов. Строение атома (ядро + электроны) открыто <b><a href="scientists.html" style="color: inherit; text-decoration: underline;">Резерфорд, Бор</a></b>. Это фундаментальный факт, лежащий в основе физики.</p>
+          </div>
+        </div>
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-myth">✗ Миф</span>
+              <span>🐜 Уменьшение человека (частицы Пима)</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>Уменьшить человека без разрушения атомной структуры невозможно. Масса никуда не исчезает, плотность стала бы огромной. «Частицы Пима» — фантастика, противоречащая законам квантовой физики.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. ОППЕНГЕЙМЕР -->
+    <div class="card">
+      <h3>Оппенгеймер</h3>
+      <video controls width="100%">
+        <source src="Оппенгеймер.mp4" type="video/mp4">
+      </video>
+      <div class="movie-analysis">
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-truth">✓ Правда</span>
+              <span>💣 Манхэттенский проект & ядерное деление</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>Фильм основан на реальной истории создания атомной бомбы. <b>Манхэттенский проект</b> под руководством Роберта Оппенгеймера, открытие ядерного деления <b><a href="scientists.html">Отто Ганом</b> и <b>Фрицем Штрассманом</b></a> — исторически достоверны.</p>
+          </div>
+        </div>
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-truth">✓ Правда</span>
+              <span>⚛️ Цепная реакция и формула E = mc²</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>При делении ядер урана выделяются нейтроны, вызывающие лавинообразную <b>цепную реакцию</b>. Связь массы и энергии выражается формулой <b>E = mc²</b> <b><a href="scientists.html">Альберт Эйнштейн</a></b>. Фильм точно передаёт научные принципы.</p>
+          </div>
+        </div>
+        <div class="collapsible-section">
+          <div class="section-header">
+            <div class="header-left">
+              <span class="badge-neutral">📖 Исторический факт</span>
+              <span>🎥 Художественная интерпретация</span>
+            </div>
+            <button class="toggle-btn">+</button>
+          </div>
+          <div class="section-content collapsed">
+            <p>Картина сочетает реальные события (испытание «Тринити», личность Оппенгеймера) с драматическими элементами, но сохраняет научную и историческую достоверность в ключевых моментах.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-nav">
+      <a href="index.html">Главная</a>
+      <a href="about.html">Об авторе</a>
+      <a href="movies.html">Фильмы</a>
+      <a href="tests.html">Тесты</a>
+      <a href="scientists.html">Учёные</a>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/mp13q/" target="_blank">📷 Instagram</a>
+      <a href="https://t.me" target="_blank">✈ Telegram</a>
+      <a href="mailto:physicsproject@email.com">✉ physicsproject@email.com</a>
+    </div>
+    <p>© 2026 Физика в кадре</p>
+  </div>
+</footer>
+
+<script>
+  (function() {
+    const sections = document.querySelectorAll('.collapsible-section');
+    sections.forEach(section => {
+      const header = section.querySelector('.section-header');
+      const btn = section.querySelector('.toggle-btn');
+      const content = section.querySelector('.section-content');
+      if (!header || !content) return;
+      
+      // Изначально все свёрнуты (collapsed)
+      if (!content.classList.contains('collapsed')) {
+        content.classList.add('collapsed');
+      }
+      if (btn) btn.textContent = '+';
+      
+      const toggleBlock = () => {
+        const isCollapsed = content.classList.contains('collapsed');
+        if (isCollapsed) {
+          content.classList.remove('collapsed');
+          if (btn) btn.textContent = '−';
+        } else {
+          content.classList.add('collapsed');
+          if (btn) btn.textContent = '+';
+        }
+      };
+      
+      header.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleBlock();
+      });
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleBlock();
+        });
+      }
+    });
+  })();
+</script>
+</body>
+</html>

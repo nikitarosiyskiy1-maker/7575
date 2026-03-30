@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Физика в кадре — Наука в кино</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    
+    .background-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.9));
+    }
+
+    .background-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('galaxy1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      opacity: 0.4;
+      filter: brightness(0.7);
+    }
+
+    /* Шапка — как на странице фильмов */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 22px;
+      font-weight: 800;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 15px;
+      background: linear-gradient(45deg, cyan, deepskyblue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #0f172a;
+      box-shadow: 0 0 15px cyan;
+      animation: pulse 2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { box-shadow: 0 0 10px cyan; }
+      to { box-shadow: 0 0 25px deepskyblue; }
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #fff;
+      transition: 0.3s;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: cyan;
+    }
+
+    /* Hero секция */
+    .hero {
+      text-align: center;
+      padding: 100px 20px 70px;
+      animation: fadeIn 1.5s ease;
+      position: relative;
+      z-index: 5;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, cyan, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: #e2e8f0;
+      max-width: 700px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 15px 35px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(45deg, cyan, deepskyblue);
+      color: #0f172a;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 15px cyan;
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px deepskyblue;
+    }
+
+    /* Секции */
+    .section {
+      padding: 40px 60px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 42px;
+      margin-bottom: 50px;
+      background: linear-gradient(90deg, cyan, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    /* Стеклянные карточки (как на странице фильмов) */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 35px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      padding: 32px 24px;
+      border-radius: 28px;
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      transition: all 0.4s ease;
+      text-align: center;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: cyan;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+      background: rgba(20, 35, 65, 0.7);
+    }
+
+    .card-icon {
+      font-size: 54px;
+      margin-bottom: 20px;
+      display: inline-block;
+      filter: drop-shadow(0 0 8px cyan);
+    }
+
+    .glass-card h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: cyan;
+      font-weight: 700;
+    }
+
+    .glass-card p {
+      color: #cbd5e6;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    /* Цитата */
+    .quote-block {
+      max-width: 800px;
+      margin: 30px auto 20px;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      border-radius: 30px;
+      text-align: center;
+      border-left: 4px solid cyan;
+      border-right: 4px solid cyan;
+    }
+
+    .quote-text {
+      font-size: 18px;
+      font-style: italic;
+      color: #eef4ff;
+      line-height: 1.6;
+    }
+
+    .quote-author {
+      margin-top: 15px;
+      color: cyan;
+      font-weight: 500;
+    }
+
+    /* Карточки фильмов */
+    .movies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .movie-card {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 24px 20px;
+      text-align: center;
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-8px);
+      border-color: cyan;
+      box-shadow: 0 10px 28px rgba(0, 255, 255, 0.25);
+      background: rgba(0, 0, 0, 0.65);
+    }
+
+    .movie-icon {
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+
+    .movie-card h4 {
+      font-size: 22px;
+      color: cyan;
+      margin-bottom: 10px;
+    }
+
+    .movie-card p {
+      font-size: 14px;
+      color: #ccdeff;
+      line-height: 1.5;
+    }
+
+    .movie-badge {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 11px;
+      background: rgba(0, 255, 255, 0.2);
+      padding: 5px 14px;
+      border-radius: 30px;
+      color: #aaf0ff;
+    }
+
+    /* Статистика */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: 0.3s;
+    }
+
+    .stat-card:hover {
+      border-color: cyan;
+      transform: scale(1.02);
+    }
+
+    .stat-number {
+      font-size: 42px;
+      font-weight: 800;
+      color: cyan;
+    }
+
+    .stat-label {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    /* Футер */
+    footer {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 40px 30px 30px;
+      text-align: center;
+      color: #94a3b8;
+      margin-top: 40px;
+      border-top: 1px solid rgba(0, 255, 255, 0.2);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      gap: 35px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .footer-nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .footer-nav a:hover {
+      color: cyan;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .footer-social a {
+      text-decoration: none;
+      color: #cbd5e1;
+      transition: 0.3s;
+    }
+
+    .footer-social a:hover {
+      color: cyan;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Адаптив */
+    @media (max-width: 850px) {
+      header {
+        padding: 15px 25px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      nav a {
+        margin: 0 12px;
+      }
+      .hero h1 {
+        font-size: 38px;
+      }
+      .hero p {
+        font-size: 16px;
+      }
+      .section {
+        padding: 30px 20px;
+      }
+      .section-title {
+        font-size: 32px;
+      }
+      .glass-card h3 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Фоновый блок с картинкой -->
+  <div class="background-bg"></div>
+
+  <header>
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🎬</div>
+      Физика в кадре
+    </a>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="about.html">Об авторе</a>
+      <a href="movies.html">Фильмы</a>
+      <a href="tests.html">Тесты</a>
+      <a href="scientists.html">Учёные</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Физика в кадре</h1>
+    <p>Интерактивная образовательная онлайн-платформа, которая объясняет законы физики через разбор ключевых сцен из популярных научно-фантастических, фэнтезийных и приключенческих фильмов и сериалов.</p>
+    <a href="movies.html" class="btn">🚀 Начать изучение</a>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <div class="quote-text">«Наука — это не только знание, но и способность смотреть на мир с удивлением. Кино помогает нам задавать правильные вопросы.»</div>
+    <div class="quote-author">— Физика в кадре</div>
+  </div>
+
+  <!-- Преимущества -->
+  <div class="section">
+    <h2 class="section-title">Почему выбирают нас?</h2>
+    <div class="cards-grid">
+      <div class="glass-card">
+        <div class="card-icon">🎞️</div>
+        <h3>Кино и наука</h3>
+        <p>Изучай законы физики через сцены из любимых фильмов и сериалов. Разбираем голливудские блокбастеры от «Интерстеллара» до «Человека-муравья».</p>
+      </div>
+      <div class="glass-card">
+        <div class="card-icon">🧪</div>
+        <h3>Интерактивные разборы</h3>
+        <p>Пошаговые объяснения физических явлений: чёрные дыры, квантовая механика, теория относительности — простым языком с примерами из кино.</p>
+      </div>
+      <div class="glass-card">
+        <div class="card-icon">📊</div>
+        <h3>Тесты и практикумы</h3>
+        <p>Проверяй свои знания с помощью тестов после каждого материала. Интересные вопросы помогут закрепить изученное.</p>
+      </div>
+      <div class="glass-card">
+        <div class="card-icon">👨‍🔬</div>
+        <h3>Знаковые ученые</h3>
+        <p>Узнавай о великих физиках: Эйнштейн, Оппенгеймер, Кип Торн и другие, чьи идеи легли в основу культовых фильмов.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Популярные фильмы -->
+  <div class="section">
+    <h2 class="section-title">Популярные разборы</h2>
+    <div class="movies-grid">
+      <div class="movie-card" onclick="location.href='movies.html'">
+        <div class="movie-icon">🌌</div>
+        <h4>Интерстеллар</h4>
+        <p>Чёрные дыры, замедление времени и гравитация: что правда, а что — художественный вымысел.</p>
+        <span class="movie-badge">⭐ Научный консультант — Кип Торн</span>
+      </div>
+      <div class="movie-card" onclick="location.href='movies.html'">
+        <div class="movie-icon">💥</div>
+        <h4>Особо опасен</h4>
+        <p>Изогнутая пуля: законы Ньютона vs голливудская фантазия.</p>
+        <span class="movie-badge">🎯 Реальная физика пули</span>
+      </div>
+      <div class="movie-card" onclick="location.href='movies.html'">
+        <div class="movie-icon">🐜</div>
+        <h4>Человек-муравей</h4>
+        <p>Уменьшение и квантовая физика: почему частицы Пима — это миф?</p>
+        <span class="movie-badge">⚛️ Строение атома</span>
+      </div>
+      <div class="movie-card" onclick="location.href='movies.html'">
+        <div class="movie-icon">☢️</div>
+        <h4>Оппенгеймер</h4>
+        <p>Ядерное деление, цепная реакция и формула E=mc²: реальная история атомной бомбы.</p>
+        <span class="movie-badge">📖 Историческая достоверность</span>
+      </div>
+    </div>
+  </div>
+
+ 
+
+  <!-- Дополнительный блок -->
+  <div class="section">
+    <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+      <div class="glass-card">
+        <div class="card-icon">🔭</div>
+        <h3>Научное кинове́дение</h3>
+        <p>Учимся отделять реальные научные факты от спецэффектов. Станьте зрителем, который понимает физику за кадром.</p>
+      </div>
+      <div class="glass-card">
+        <div class="card-icon">📚</div>
+        <h3>Образовательный контент</h3>
+        <p>Видео-разборы, структурированные статьи и удобные сворачиваемые блоки помогут освоить сложные темы быстро.</p>
+      </div>
+      <div class="glass-card">
+        <div class="card-icon">🎓</div>
+        <h3>Для всех возрастов</h3>
+        <p>Материалы подходят как школьникам, так и взрослым, интересующимся наукой и кино.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-nav">
+        <a href="index.html">Главная</a>
+        <a href="about.html">Об авторе</a>
+        <a href="movies.html">Фильмы</a>
+        <a href="tests.html">Тесты</a>
+        <a href="scientists.html">Учёные</a>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/mp13q/" target="_blank">📷 Instagram</a>
+        <a href="https://t.me" target="_blank">✈ Telegram</a>
+        <a href="mailto:physicsproject@email.com">✉ physicsproject@email.com</a>
+      </div>
+      <p>© 2026 Физика в кадре</p>
+    </div>
+  </footer>
+
+  <script>
+    // Плавное появление элементов при скролле
+    const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -20px 0px" };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+    
+    document.querySelectorAll('.glass-card, .movie-card, .stat-card, .quote-block').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(25px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+    
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.glass-card, .movie-card, .stat-card, .quote-block').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
